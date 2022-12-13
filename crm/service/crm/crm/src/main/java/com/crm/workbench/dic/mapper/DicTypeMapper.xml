@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.workbench.dic.mapper.DicTypeMapper">
+  <resultMap id="BaseResultMap" type="com.crm.workbench.dic.model.DicType">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    code, name, description
+  </sql>
+  <resultMap id="dicTypeMap" type="com.crm.workbench.dic.model.DicType">
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <collection property="dicValueList" ofType="com.crm.workbench.dic.model.DicValue"
+    select="selectDicValueByTypeCode" column="{typeCode=code}">
+    </collection>
+  </resultMap>
+  <!--查询所有的字典类型-->
+  <select id="selectDicTypeAll" resultMap="dicTypeMap">
+   select code
+ from
+ tbl_dic_type
+  </select>
+  <resultMap id="dicValueMap" type="com.crm.workbench.dic.model.DicValue">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+  <select id="selectDicValueByTypeCode" resultMap="dicValueMap">
+  select id,value from tbl_dic_value where type_code=#{typeCode} order by order_no
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_dic_type
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_dic_type
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.crm.workbench.dic.model.DicType">
+    insert into tbl_dic_type (code, name, description
+      )
+    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crm.workbench.dic.model.DicType">
+    insert into tbl_dic_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.workbench.dic.model.DicType">
+    update tbl_dic_type
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crm.workbench.dic.model.DicType">
+    update tbl_dic_type
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

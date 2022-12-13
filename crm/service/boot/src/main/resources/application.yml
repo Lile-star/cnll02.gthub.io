@@ -1,0 +1,30 @@
+person:
+  userName: "王达\n牛逼"
+  boss: true
+  birth: 2020/05/05
+  age: 18
+  interests:
+    - 篮球
+    - 唱
+    - 跳
+    - rapper
+  animal: [鸡,鸭]
+  score: {english: 80,math: 95}
+  salarys:
+    - 999.8
+    - 998.9
+  pet:
+    name: 小黄
+    weight: 15.0
+  allPets:
+    sick:
+      - {name: 阿狗,weight: 99.99}
+      - name: 阿猫
+        weight: 88.88
+      - name: 啊虫
+        weight: 5.55
+    health:
+      - {name: 小黄,weight: 15.0}
+      - {name: 小白,weight: 15.55}
+
+

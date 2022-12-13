@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.workbench.activity.mapper.ActivityMapper">
+  <resultMap id="BaseResultMap" type="com.crm.workbench.activity.model.Activity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="owner" jdbcType="INTEGER" property="owner" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_date" jdbcType="CHAR" property="startDate" />
+    <result column="end_date" jdbcType="CHAR" property="endDate" />
+    <result column="cost" jdbcType="VARCHAR" property="cost" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_time" jdbcType="CHAR" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="edit_time" jdbcType="CHAR" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, owner, name, start_date, end_date, cost, description, create_time, create_by, 
+    edit_time, edit_by
+  </sql>
+  <!--select act.id,act.name,act.start_date,act.end_date,u.`name` uname from
+tbl_activity act
+join
+tbl_user u
+on act.`owner`=u.id
+LIMIT 5,5-->
+  <!--分页查询-->
+  <select id="selectActivityLimit" resultType="map">
+    select act.id,act.name,act.start_date,act.end_date,u.`name` uname
+     from
+    tbl_activity act
+    join
+    tbl_user u
+    on act.`owner`=u.id
+    <where>
+      <if test="name != ''">
+        and act.name like '%${name}%'
+      </if>
+      <if test="uname != ''">
+        and u.name like '%${uname}%'
+      </if>
+      <if test="startDate != ''">
+        and act.start_date >= #{startDate}
+      </if>
+      <if test="endDate != ''">
+        and #{endDate} >= act.end_date
+      </if>
+    </where>
+    LIMIT #{skipNum},${pageSize}
+  </select>
+  <!--记录数量查询-->
+  <select id="countActivity" resultType="int">
+    select count(1)
+     from
+    tbl_activity act
+    join
+    tbl_user u
+    on act.`owner`=u.id
+    <where>
+      <if test="name != ''">
+      and act.name like '%${name}%'
+      </if>
+      <if test="uname != ''">
+        and u.name like '%${uname}%'
+      </if>
+      <if test="startDate != ''">
+      and act.start_date >= #{startDate}
+      </if>
+      <if test="endDate != ''">
+      and #{endDate} >= act.end_date
+      </if>
+    </where>
+  </select>
+  <!--根据主set
+    name=#{name},
+    start_date=#{startDate},
+    end_date=#{endDate},
+    cost=#{cost},
+    description=#{description},
+    create_time=#{createTime},
+    create_by=#{createBy},
+    edit_time=#{editTime},
+    edit_by=#{editBy}键更新-->
+  <update id="updateActivity">
+    update tbl_activity
+    <set>
+      <if test="name !=null and name != ''">
+        name=#{name},
+      </if>
+      <if test="endDate != null and endDate != ''">
+        end_date=#{endDate},
+      </if>
+      <if test="startDate != null and startDate != ''">
+        start_date=#{startDate},
+      </if>
+      <if test="cost != null and cost != ''">
+        cost=#{cost},
+      </if>
+      <if test="description != null and description != ''">
+        description=#{description},
+      </if>
+      <if test=" createTime != null and createTime != ''">
+        create_time=#{createTime},
+      </if>
+      <if test="createBy != null and createBy != ''">
+        create_by=#{createBy},
+      </if>
+      <if test="editTime != null and editTime != ''">
+        edit_time=#{editTime},
+      </if>
+      <if test="editBy != null and editBy != ''">
+        edit_by=#{editBy}
+      </if>
+    </set>
+    where
+    id=#{id}
+  </update>
+  <!--查看市场活动的细节-->
+  <resultMap id="BaseResultMap3" type="com.crm.workbench.activity.model.ActivityRemark">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="note_content" jdbcType="VARCHAR" property="noteContent" />
+    <result column="create_time" jdbcType="CHAR" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="edit_time" jdbcType="CHAR" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="edit_flag" jdbcType="CHAR" property="editFlag" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <association property="createByUser" javaType="com.crm.workbench.user.model.User">
+      <id column="create_by" property="id"></id>
+      <result column="createUserName" property="name"></result>
+    </association>
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.crm.workbench.activity.model.Activity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_date" jdbcType="CHAR" property="startDate" />
+    <result column="end_date" jdbcType="CHAR" property="endDate" />
+    <result column="cost" jdbcType="VARCHAR" property="cost" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_time" jdbcType="CHAR" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="edit_time" jdbcType="CHAR" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <association property="createByUser" javaType="com.crm.workbench.user.model.User">
+      <id column="createUserId" property="id"/>
+      <result column="createUserName" property="name"></result>
+    </association>
+    <association property="editByUser">
+      <id column="editUserId" property="id"/>
+      <result column="editUserName" property="name"></result>
+    </association>
+    <!--mybatis的一对多关联映射
+    property:用于指定当前resultMap指定的类中的某个list集合属性名
+    ofType:用于指定property所指定的这个集合的泛型
+    select:用于指定使用哪个SQL映射语句来为property指定的list集合赋值
+    column:用于指定使用什么样的条件来执行select所指定的sql语句,语法{参数名=显示列名[,参数名=显示列名]}
+
+    -->
+    <collection property="activityRemarkList" ofType="com.crm.workbench.activity.model.ActivityRemark" column="{actId=id}" select="selectActivityRemarkByActivityId"/>
+  </resultMap>
+
+
+  <select id="selectActivityDetailById" resultMap="BaseResultMap2">
+  select  act.id,act.`name`,act.start_date,act.end_date,act.cost, act.description,act.create_time,act.edit_time ,u.`name` createUserName,u1.`name` editUserName,u.id createUserId, u1.id editUserId
+from tbl_activity act
+join tbl_user u
+on u.id=act.create_by
+LEFT join tbl_user u1
+on u1.id=act.edit_by
+WHERE act.id=#{activityId}
+  </select>
+  <!--查询多条备注-->
+  <select id="selectActivityRemarkByActivityId" resultMap="BaseResultMap3">
+  select ar.id, ar.note_content, ar.create_time, ar.create_by, ar.edit_time, ar.edit_by, ar.edit_flag, ar.activity_id,u.name createUserName from tbl_activity_remark ar join
+    tbl_user u on ar.create_by=u.id where activity_id=#{actId}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_activity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <!--根据市场活动的name模糊查询市场活动-->
+  <select id="selectActivityLikeActivityName"  resultType="map">
+    select act.id,act.`name`,act.start_date,act.end_date,u.`name` owner_name
+from tbl_activity act
+join
+tbl_user u
+on act.`owner`=u.id
+<where>
+ <if test="activityName != null and activityName !='' ">
+   act.name like '%${activityName}%'
+ </if>
+</where>
+  </select>
+
+
+  <!--获取图表计数活动数据-->
+  <select id="getChartsCountActivityData" resultType="map">
+    select name,sum(cost) cost from tbl_activity  group by name
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_activity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.crm.workbench.activity.model.Activity">
+    insert into tbl_activity (id, owner, name, 
+      start_date, end_date, cost, 
+      description, create_time, create_by, 
+      edit_time, edit_by)
+    values (#{id,jdbcType=INTEGER}, #{owner,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=CHAR}, #{endDate,jdbcType=CHAR}, #{cost,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=CHAR}, #{createBy,jdbcType=INTEGER}, 
+      #{editTime,jdbcType=CHAR}, #{editBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crm.workbench.activity.model.Activity">
+    insert into tbl_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+      <if test="editBy != null">
+        edit_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=CHAR},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=CHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=CHAR},
+      </if>
+      <if test="editBy != null">
+        #{editBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.workbench.activity.model.Activity">
+    update tbl_activity
+    <set>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=CHAR},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=CHAR},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=CHAR},
+      </if>
+      <if test="editBy != null">
+        edit_by = #{editBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crm.workbench.activity.model.Activity">
+    update tbl_activity
+    set owner = #{owner,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=CHAR},
+      end_date = #{endDate,jdbcType=CHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=CHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      edit_time = #{editTime,jdbcType=CHAR},
+      edit_by = #{editBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

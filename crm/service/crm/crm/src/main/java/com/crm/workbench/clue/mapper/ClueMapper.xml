@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.workbench.clue.mapper.ClueMapper">
+  <resultMap id="BaseResultMap" type="com.crm.workbench.clue.model.Clue">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="appellation" jdbcType="INTEGER" property="appellation" />
+    <result column="owner" jdbcType="INTEGER" property="owner" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
+    <result column="mphone" jdbcType="VARCHAR" property="mphone" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="edit_time" jdbcType="VARCHAR" property="editTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="contact_summary" jdbcType="VARCHAR" property="contactSummary" />
+    <result column="next_contact_time" jdbcType="VARCHAR" property="nextContactTime" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, full_name, appellation, owner, company, job, email, phone, website, mphone, state, 
+    source, create_by, create_time, edit_by, edit_time, description, contact_summary, 
+    next_contact_time, address
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_clue
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+<!--查询线索条数
+fullName,company,phone,source,owner,mphone,clueState-->
+  <select id="countClue" resultType="int">
+    select count(1) from
+tbl_clue c
+join
+tbl_dic_value d
+on c.appellation=d.id
+join
+tbl_dic_value d1
+on c.source=d1.id
+JOIN
+tbl_dic_value d2
+on c.state=d2.id
+join
+tbl_user u
+on c.`owner`=u.id
+    <where>
+      <if test="fullName !=''">
+        c.full_name like '%${fullName}%'
+      </if>
+      <if test="company !=''">
+        and c.company like '%${company}%'
+      </if>
+      <if test="phone !=''">
+        and c.phone = #{phone}
+      </if>
+      <if test="source !='' and source != null">
+        and c.source = #{source}
+      </if>
+      <if test="owner !=''">
+        and u.name like '%${owner}%'
+      </if>
+      <if test="mphone !=''">
+        and c.mphone =#{mphone}
+      </if>
+      <if test="clueState !='' and clueState != null">
+        and c.state = #{clueState}
+      </if>
+    </where>
+  </select>
+  <!--查询所有线索
+  fullName,company,phone,source,owner,mphone,clueState-->
+  <select id="selectClueLimit" resultType="map">
+    select c.id,c.full_name,c.company,c.phone,c.mphone,d.`value` appellation,d1.`value` source,d2.`value` state,u.`name` owner
+from
+tbl_clue c
+join
+tbl_dic_value d
+on c.appellation=d.id
+join
+tbl_dic_value d1
+on c.source=d1.id
+JOIN
+tbl_dic_value d2
+on c.state=d2.id
+join
+tbl_user u
+on c.`owner`=u.id
+    <where>
+
+      <if test="fullName!=''">
+        and c.full_name like '%${fullName}%'
+      </if>
+      <if test="company!=''">
+        and c.company like '%${company}%'
+      </if>
+      <if test="phone!=''">
+        and c.phone = #{phone}
+      </if>
+      <if test="source!=null">
+        and c.source =#{source}
+      </if>
+      <if test="owner!=''">
+        and u.name like '%${owner}%'
+      </if>
+      <if test="mphone!=''">
+        and c.mphone =#{mphone}
+      </if>
+      <if test="clueState!=null">
+        and c.state =#{clueState}
+      </if>
+    </where>
+LIMIT #{skipNum},#{pageSize}
+
+  </select>
+  <!---->
+  <select id="getClueInfoById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from tbl_clue where id=#{id}
+  </select>
+
+
+  <!--获取详情-->
+  <resultMap id="BaseResultMapDetail" type="com.crm.workbench.clue.model.Clue">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="appellation" jdbcType="INTEGER" property="appellation" />
+    <result column="owner" jdbcType="INTEGER" property="owner" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
+    <result column="mphone" jdbcType="VARCHAR" property="mphone" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="edit_time" jdbcType="VARCHAR" property="editTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="contact_summary" jdbcType="VARCHAR" property="contactSummary" />
+    <result column="next_contact_time" jdbcType="VARCHAR" property="nextContactTime" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <collection property="appellationDicValue" ofType="com.crm.workbench.dic.model.DicValue"
+                select="selectappellationDicValue" column="{appellationId=appellation}"></collection>
+
+    <collection property="stateDicValue" ofType="com.crm.workbench.dic.model.DicValue"
+                select="selectstateDicValue" column="{stateId=state}"></collection>
+
+    <collection property="sourceDicValue" ofType="com.crm.workbench.dic.model.DicValue"
+                select="selectsourceDicValue" column="{sourceId=source}"></collection>
+
+    <collection property="ownerUser" ofType="com.crm.workbench.user.model.User"
+                select="selectownerUser" column="{ownerId=owner}"></collection>
+
+    <collection property="createByUser" ofType="com.crm.workbench.user.model.User"
+                select="selectcreateByUser" column="{createId=create_by}"></collection>
+
+    <collection property="editByUser" ofType="com.crm.workbench.user.model.User"
+                select="selecteditByUser" column="{editId=edit_by}"></collection>
+
+    <collection property="clueRemarkList" ofType="com.crm.workbench.clue.model.ClueRemark"
+                select="selectByClueIdRemark" column="{clueId=id}"></collection>
+    <collection property="activityList" ofType="map"
+                select="selectActivity" column="{clueId=id}"></collection>
+  </resultMap>
+  <select id="selectClueDetailById" resultMap="BaseResultMapDetail">
+    select <include refid="Base_Column_List"></include> from tbl_clue where id=#{clueId}
+  </select>
+
+  <resultMap id="DicValueDetail" type="com.crm.workbench.dic.model.DicValue">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+  <select id="selectappellationDicValue" resultMap="DicValueDetail">
+    select id,value from tbl_dic_value where id=#{appellationId}
+  </select>
+  <select id="selectstateDicValue" resultMap="DicValueDetail">
+    select id,value from tbl_dic_value where id=#{stateId}
+  </select>
+  <select id="selectsourceDicValue" resultMap="DicValueDetail">
+    select id,value from tbl_dic_value where id=#{sourceId}
+  </select>
+  <resultMap id="userDetail" type="com.crm.workbench.user.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <select id="selectownerUser" resultMap="userDetail">
+    select id,name from tbl_user where id=#{ownerId}
+  </select>
+  <select id="selectcreateByUser" resultMap="userDetail">
+    select id,name from tbl_user where id=#{createId}
+  </select>
+  <select id="selecteditByUser" resultMap="userDetail">
+    select id,name from tbl_user where id=#{editId}
+  </select>
+
+
+  <resultMap id="selectByClueIdRemarkBaseResultMap" type="com.crm.workbench.clue.model.ClueRemark">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="note_content" jdbcType="VARCHAR" property="noteContent" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <association property="createUser" javaType="com.crm.workbench.user.model.User">
+      <id property="id" column="uid"></id>
+      <result property="name" column="name"></result>
+    </association>
+  </resultMap>
+
+
+  <select id="selectByClueIdRemark" resultMap="selectByClueIdRemarkBaseResultMap">
+    select cr.id,cr.note_content,cr.create_time,u.name,u.id uid
+from
+tbl_clue_remark cr
+join
+tbl_user u
+on
+cr.create_by=u.id
+where cr.clue_id=#{clueId}
+  </select>
+  <!--select car.id,ac.name activity_name,ac.start_date,ac.end_date,u.`name` owner_name
+from
+tbl_clue_activity_relation car
+join
+tbl_activity ac
+on car.activity_id=ac.id
+join
+tbl_user u
+on ac.`owner`=u.id
+where car.clue_id=32 根据线索查找市场活动-->
+  <select id="selectActivity" resultType="map">
+    select car.id,ac.name activity_name,ac.start_date,ac.end_date,u.`name` owner_name
+from
+tbl_clue_activity_relation car
+join
+tbl_activity ac
+on car.activity_id=ac.id
+join
+tbl_user u
+on ac.`owner`=u.id
+where car.clue_id=#{clueId}
+  </select>
+  <!--关联市场活动和线索-->
+  <insert id="relationActivity">
+    insert into tbl_clue_activity_relation values (null,#{clueId},#{actId})
+  </insert>
+  <!--根据市场活动和线索的关联表id删除关联-->
+  <delete id="deleteActivityRelation">
+    delete from tbl_clue_activity_relation where id=#{relationId}
+  </delete>
+  <!--根据线索id获取转换时需要的线索信息-->
+  <select id="getClueConvertInfo" resultType="map">
+  select c.id,c.full_name,c.company,dv.`value`,u.`name` from tbl_clue c
+join
+tbl_dic_value dv
+on c.appellation=dv.id
+JOIN tbl_user u
+on c.`owner`=u.id
+where c.id=#{clueId}
+  </select>
+
+
+
+
+
+
+
+
+
+
+
+  <delete id="deleteClueActivityRelationByClueId">
+    delete from tbl_clue_activity_relation where clue_id=#{id}
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_clue
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.crm.workbench.clue.model.Clue">
+    insert into tbl_clue (id, full_name, appellation, 
+      owner, company, job, 
+      email, phone, website, 
+      mphone, state, source, 
+      create_by, create_time, edit_by, 
+      edit_time, description, contact_summary, 
+      next_contact_time, address)
+    values (#{id,jdbcType=INTEGER}, #{fullName,jdbcType=VARCHAR}, #{appellation,jdbcType=INTEGER}, 
+      #{owner,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{website,jdbcType=VARCHAR}, 
+      #{mphone,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{editBy,jdbcType=INTEGER}, 
+      #{editTime,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{contactSummary,jdbcType=VARCHAR}, 
+      #{nextContactTime,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crm.workbench.clue.model.Clue">
+    insert into tbl_clue
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="fullName != null">
+        full_name,
+      </if>
+      <if test="appellation != null">
+        appellation,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="website != null">
+        website,
+      </if>
+      <if test="mphone != null">
+        mphone,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="editBy != null">
+        edit_by,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="contactSummary != null">
+        contact_summary,
+      </if>
+      <if test="nextContactTime != null">
+        next_contact_time,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="fullName != null">
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="appellation != null">
+        #{appellation,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="mphone != null">
+        #{mphone,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="editBy != null">
+        #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSummary != null">
+        #{contactSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextContactTime != null">
+        #{nextContactTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.workbench.clue.model.Clue">
+    update tbl_clue
+    <set>
+      <if test="fullName != null">
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="appellation != null">
+        appellation = #{appellation,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        job = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        website = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="mphone != null">
+        mphone = #{mphone,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="editBy != null">
+        edit_by = #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSummary != null">
+        contact_summary = #{contactSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextContactTime != null">
+        next_contact_time = #{nextContactTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crm.workbench.clue.model.Clue">
+    update tbl_clue
+    set full_name = #{fullName,jdbcType=VARCHAR},
+      appellation = #{appellation,jdbcType=INTEGER},
+      owner = #{owner,jdbcType=INTEGER},
+      company = #{company,jdbcType=VARCHAR},
+      job = #{job,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      website = #{website,jdbcType=VARCHAR},
+      mphone = #{mphone,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      source = #{source,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      edit_by = #{editBy,jdbcType=INTEGER},
+      edit_time = #{editTime,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      contact_summary = #{contactSummary,jdbcType=VARCHAR},
+      next_contact_time = #{nextContactTime,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

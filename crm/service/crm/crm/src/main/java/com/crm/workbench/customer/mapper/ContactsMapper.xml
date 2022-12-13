@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.workbench.customer.mapper.ContactsMapper">
+  <resultMap id="BaseResultMap" type="com.crm.workbench.customer.model.Contacts">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="owner" jdbcType="INTEGER" property="owner" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="appellation" jdbcType="INTEGER" property="appellation" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mphone" jdbcType="VARCHAR" property="mphone" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="edit_time" jdbcType="VARCHAR" property="editTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="contact_summary" jdbcType="VARCHAR" property="contactSummary" />
+    <result column="next_contact_time" jdbcType="VARCHAR" property="nextContactTime" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, owner, source, customer_id, full_name, appellation, email, mphone, job, birth, 
+    create_by, create_time, edit_by, edit_time, description, contact_summary, next_contact_time, 
+    address
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_contacts
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_contacts
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.crm.workbench.customer.model.Contacts">
+    insert into tbl_contacts (id, owner, source, 
+      customer_id, full_name, appellation, 
+      email, mphone, job, 
+      birth, create_by, create_time, 
+      edit_by, edit_time, description, 
+      contact_summary, next_contact_time, address
+      )
+    values (#{id,jdbcType=INTEGER}, #{owner,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, 
+      #{customerId,jdbcType=INTEGER}, #{fullName,jdbcType=VARCHAR}, #{appellation,jdbcType=INTEGER}, 
+      #{email,jdbcType=VARCHAR}, #{mphone,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, 
+      #{birth,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{editBy,jdbcType=INTEGER}, #{editTime,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{contactSummary,jdbcType=VARCHAR}, #{nextContactTime,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}
+      )
+    <selectKey keyColumn="id" keyProperty="id" order="AFTER" resultType="int">
+      <!--
+         获取刚刚插入到数据中的这条记录自动递增的主键值
+       -->
+      select @@identity
+    </selectKey>
+  </insert>
+  <!--插入联系人,市场活动关联表-->
+  <insert id="insertContactsActivityRelation">
+    insert into  tbl_contacts_activity_relation values(null,#{id},#{integer})
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="com.crm.workbench.customer.model.Contacts">
+    insert into tbl_contacts
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="fullName != null">
+        full_name,
+      </if>
+      <if test="appellation != null">
+        appellation,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="mphone != null">
+        mphone,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="birth != null">
+        birth,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="editBy != null">
+        edit_by,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="contactSummary != null">
+        contact_summary,
+      </if>
+      <if test="nextContactTime != null">
+        next_contact_time,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="fullName != null">
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="appellation != null">
+        #{appellation,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mphone != null">
+        #{mphone,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null">
+        #{birth,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="editBy != null">
+        #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSummary != null">
+        #{contactSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextContactTime != null">
+        #{nextContactTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.workbench.customer.model.Contacts">
+    update tbl_contacts
+    <set>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="fullName != null">
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="appellation != null">
+        appellation = #{appellation,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mphone != null">
+        mphone = #{mphone,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null">
+        job = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null">
+        birth = #{birth,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="editBy != null">
+        edit_by = #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSummary != null">
+        contact_summary = #{contactSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextContactTime != null">
+        next_contact_time = #{nextContactTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crm.workbench.customer.model.Contacts">
+    update tbl_contacts
+    set owner = #{owner,jdbcType=INTEGER},
+      source = #{source,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      appellation = #{appellation,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      mphone = #{mphone,jdbcType=VARCHAR},
+      job = #{job,jdbcType=VARCHAR},
+      birth = #{birth,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      edit_by = #{editBy,jdbcType=INTEGER},
+      edit_time = #{editTime,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      contact_summary = #{contactSummary,jdbcType=VARCHAR},
+      next_contact_time = #{nextContactTime,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

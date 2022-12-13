@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.workbench.tran.mapper.TranMapper">
+  <resultMap id="BaseResultMap" type="com.crm.workbench.tran.model.Tran">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="owner" jdbcType="INTEGER" property="owner" />
+    <result column="money" jdbcType="VARCHAR" property="money" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="expected_date" jdbcType="VARCHAR" property="expectedDate" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="stage" jdbcType="INTEGER" property="stage" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <result column="contacts_id" jdbcType="INTEGER" property="contactsId" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="edit_time" jdbcType="VARCHAR" property="editTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="contact_summary" jdbcType="VARCHAR" property="contactSummary" />
+    <result column="next_contact_time" jdbcType="VARCHAR" property="nextContactTime" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, owner, money, name, expected_date, customer_id, stage, type, source, activity_id, 
+    contacts_id, create_by, create_time, edit_by, edit_time, description, contact_summary, 
+    next_contact_time, order_no
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_tran
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_tran
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.crm.workbench.tran.model.Tran">
+    insert into tbl_tran (id, owner, money, 
+      name, expected_date, customer_id, 
+      stage, type, source, 
+      activity_id, contacts_id, create_by, 
+      create_time, edit_by, edit_time, 
+      description, contact_summary, next_contact_time, 
+      order_no)
+    values (#{id,jdbcType=INTEGER}, #{owner,jdbcType=INTEGER}, #{money,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{expectedDate,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
+      #{stage,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, 
+      #{activityId,jdbcType=INTEGER}, #{contactsId,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{editBy,jdbcType=INTEGER}, #{editTime,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{contactSummary,jdbcType=VARCHAR}, #{nextContactTime,jdbcType=VARCHAR}, 
+      #{orderNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crm.workbench.tran.model.Tran">
+    insert into tbl_tran
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="expectedDate != null">
+        expected_date,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="stage != null">
+        stage,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="contactsId != null">
+        contacts_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="editBy != null">
+        edit_by,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="contactSummary != null">
+        contact_summary,
+      </if>
+      <if test="nextContactTime != null">
+        next_contact_time,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="expectedDate != null">
+        #{expectedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="stage != null">
+        #{stage,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="contactsId != null">
+        #{contactsId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="editBy != null">
+        #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSummary != null">
+        #{contactSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextContactTime != null">
+        #{nextContactTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    <selectKey keyColumn="id" keyProperty="id" order="AFTER" resultType="int">
+      <!--
+         获取刚刚插入到数据中的这条记录自动递增的主键值
+       -->
+      select @@identity
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.workbench.tran.model.Tran">
+    update tbl_tran
+    <set>
+      <if test="owner != null">
+        owner = #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="expectedDate != null">
+        expected_date = #{expectedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="stage != null">
+        stage = #{stage,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="contactsId != null">
+        contacts_id = #{contactsId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="editBy != null">
+        edit_by = #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSummary != null">
+        contact_summary = #{contactSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="nextContactTime != null">
+        next_contact_time = #{nextContactTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crm.workbench.tran.model.Tran">
+    update tbl_tran
+    set owner = #{owner,jdbcType=INTEGER},
+      money = #{money,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      expected_date = #{expectedDate,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      stage = #{stage,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      source = #{source,jdbcType=INTEGER},
+      activity_id = #{activityId,jdbcType=INTEGER},
+      contacts_id = #{contactsId,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      edit_by = #{editBy,jdbcType=INTEGER},
+      edit_time = #{editTime,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      contact_summary = #{contactSummary,jdbcType=VARCHAR},
+      next_contact_time = #{nextContactTime,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

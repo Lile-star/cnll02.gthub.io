@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.workbench.activity.mapper.ActivityRemarkMapper">
+  <resultMap id="BaseResultMap" type="com.crm.workbench.activity.model.ActivityRemark">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="note_content" jdbcType="VARCHAR" property="noteContent" />
+    <result column="create_time" jdbcType="CHAR" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="edit_time" jdbcType="CHAR" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="edit_flag" jdbcType="CHAR" property="editFlag" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, note_content, create_time, create_by, edit_time, edit_by, edit_flag, activity_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_activity_remark
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!--根据市场活动id删除备注信息-->
+  <delete id="deleteRemarkByActivityId" >
+    delete from tbl_activity_remark where activity_id=#{activityId}
+  </delete>
+  <!--查询多条备注-->
+  <select id="selectActivityRemarkByActivityId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from tbl_activity_remark  where activity_id=#{activityId}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_activity_remark
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.crm.workbench.activity.model.ActivityRemark">
+    insert into tbl_activity_remark (id, note_content, create_time, 
+      create_by, edit_time, edit_by, 
+      edit_flag, activity_id)
+    values (#{id,jdbcType=INTEGER}, #{noteContent,jdbcType=VARCHAR}, #{createTime,jdbcType=CHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{editTime,jdbcType=CHAR}, #{editBy,jdbcType=INTEGER}, 
+      #{editFlag,jdbcType=CHAR}, #{activityId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crm.workbench.activity.model.ActivityRemark">
+    insert into tbl_activity_remark
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="noteContent != null">
+        note_content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+      <if test="editBy != null">
+        edit_by,
+      </if>
+      <if test="editFlag != null">
+        edit_flag,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="noteContent != null">
+        #{noteContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=CHAR},
+      </if>
+      <if test="editBy != null">
+        #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editFlag != null">
+        #{editFlag,jdbcType=CHAR},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.workbench.activity.model.ActivityRemark">
+    update tbl_activity_remark
+    <set>
+      <if test="noteContent != null">
+        note_content = #{noteContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=CHAR},
+      </if>
+      <if test="editBy != null">
+        edit_by = #{editBy,jdbcType=INTEGER},
+      </if>
+      <if test="editFlag != null">
+        edit_flag = #{editFlag,jdbcType=CHAR},
+      </if>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crm.workbench.activity.model.ActivityRemark">
+    update tbl_activity_remark
+    set note_content = #{noteContent,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=CHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      edit_time = #{editTime,jdbcType=CHAR},
+      edit_by = #{editBy,jdbcType=INTEGER},
+      edit_flag = #{editFlag,jdbcType=CHAR},
+      activity_id = #{activityId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
